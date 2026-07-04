@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+<meta charset="UTF-8">
+<title>FAQ</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="main-header">
+<div class="container">
+<div class="logo">VISION</div>
+</div>
+</header>
+
+<section class="hero">
+<h1>الأسئلة الشائعة</h1>
+</section>
+
+<section>
+<div class="container">
+
+<div class="course-card faq-item">
+<div class="faq-question">هل الدروس أونلاين؟</div>
+<div class="faq-answer">نعم</div>
+</div>
+
+<div class="course-card faq-item">
+<div class="faq-question">هل يوجد شهادة؟</div>
+<div class="faq-answer">نعم</div>
+</div>
+
+</div>
+</section>
+
+<script>
+document.querySelectorAll(".faq-item").forEach(q=>{
+q.addEventListener("click",()=>{
+q.classList.toggle("open");
+});
+});
+</script>
+
+</body>
+</html>
