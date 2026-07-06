@@ -1,30 +1,19 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // -- إضافة كود زر القائمة للهواتف --
-    const mobileMenu = document.getElementById('mobile-menu');
-    const navList = document.getElementById('nav-list');
+    
+    // --- 1. إعدادات القائمة الجانبية (للهواتف) والتبديل بين الأقسام (SPA) ---
+    const mobileMenu = document.getElementById('mobile-menu') || document.querySelector('.menu-toggle');
+    const navList = document.getElementById('nav-list') || document.querySelector('nav ul');
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('.view-section');
 
     // إظهار/إخفاء القائمة عند الضغط على الزر ☰
-    if (mobileMenu) {
+    if (mobileMenu && navList) {
         mobileMenu.addEventListener('click', () => {
             navList.classList.toggle('active');
         });
     }
 
-    // إخفاء القائمة تلقائياً بعد اختيار أي رابط (لشاشات الجوال)
-    const navLinks = document.querySelectorAll('.nav-link');
-    navLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            if (window.innerWidth <= 768) {
-                navList.classList.remove('active');
-            }
-        });
-    });
-    // ------------------------------------
-    
-    // 1. نظام التبديل السلس بين الأقسام (Single Page Application)
-    const navLinks = document.querySelectorAll('.nav-link');
-    const sections = document.querySelectorAll('.view-section');
-
+    // التبديل بين الأقسام وإغلاق القائمة التلقائي
     navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault(); // منع المتصفح من القفز العشوائي
@@ -48,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 targetSection.classList.add('active-section');
                 
                 // تمييز الرابط الذي تم الضغط عليه (إذا كان داخل القائمة العلوية)
-                if(this.classList.contains('nav-link') && this.parentElement.tagName === 'LI') {
+                if(this.classList.contains('nav-link') && this.parentElement && this.parentElement.tagName === 'LI') {
                     this.classList.add('active-link');
                 }
                 
@@ -58,44 +47,53 @@ document.addEventListener('DOMContentLoaded', () => {
                     behavior: 'smooth'
                 });
             }
+
+            // إخفاء القائمة تلقائياً بعد اختيار أي رابط (لشاشات الجوال)
+            if (window.innerWidth <= 768 && navList) {
+                navList.classList.remove('active');
+            }
         });
     });
 
-    // 2. تأثير شريط التنقل (Navbar) عند التمرير لأسفل
+    // --- 2. تأثير شريط التنقل (Navbar) عند التمرير لأسفل ---
     const nav = document.querySelector('nav');
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
-            // إضافة خلفية داكنة وظل عند النزول
-            nav.style.background = 'rgba(11, 19, 43, 0.98)';
-            nav.style.boxShadow = '0 4px 20px rgba(0, 180, 216, 0.3)';
-            nav.style.padding = '10px 5%'; // تصغير حجم الشريط قليلاً
-        } else {
-            // العودة للشكل الشفاف في أعلى الصفحة
-            nav.style.background = 'rgba(11, 19, 43, 0.85)';
-            nav.style.boxShadow = 'none';
-            nav.style.padding = '15px 5%';
-        }
-    });
-const contactForm = document.getElementById('contactForm');
+    if (nav) {
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                // إضافة خلفية داكنة وظل عند النزول
+                nav.style.background = 'rgba(11, 19, 43, 0.98)';
+                nav.style.boxShadow = '0 4px 20px rgba(0, 180, 216, 0.3)';
+                nav.style.padding = '10px 5%'; // تصغير حجم الشريط قليلاً
+            } else {
+                // العودة للشكل الشفاف في أعلى الصفحة
+                nav.style.background = 'rgba(11, 19, 43, 0.85)';
+                nav.style.boxShadow = 'none';
+                nav.style.padding = '15px 5%';
+            }
+        });
+    }
+
+    // --- 3. إرسال بيانات الاستمارة عبر الواتساب ---
+    const contactForm = document.getElementById('contactForm');
     if (contactForm) {
         contactForm.addEventListener('submit', function(e) {
             e.preventDefault(); // منع إعادة تحميل الصفحة
 
-            // 1. استخراج البيانات من الحقول
+            // استخراج البيانات من الحقول
             const name = this.querySelector('input[type="text"]').value;
             const email = this.querySelector('input[type="email"]').value;
             const phone = this.querySelector('input[type="tel"]').value;
             
-            // جلب اسم الكورس بدلاً من الـ value
+            // جلب اسم الكورس
             const courseSelect = this.querySelector('select');
             const courseName = courseSelect.options[courseSelect.selectedIndex].text;
             
             const notes = this.querySelector('textarea').value;
 
-            // 2. رقم الواتساب الخاص بك (ضع رقمك هنا مع مفتاح الدولة 967 بدون أصفار أو +)
+            // رقم الواتساب
             const whatsappNumber = "967774620348"; 
 
-            // 3. تنسيق الرسالة بشكل أنيق ومرتب
+            // تنسيق الرسالة
             const message = `*طلب تسجيل جديد - أكاديمية Vision* 🎓\n\n` +
                             `*الاسم:* ${name}\n` +
                             `*الإيميل:* ${email}\n` +
@@ -103,13 +101,11 @@ const contactForm = document.getElementById('contactForm');
                             `*الكورس المطلوب:* ${courseName}\n` +
                             `*ملاحظات:* ${notes ? notes : 'لا يوجد'}`;
 
-            // 4. تشفير الرسالة لتكون متوافقة مع الروابط (URL Encoding)
+            // تشفير الرسالة وإنشاء الرابط
             const encodedMessage = encodeURIComponent(message);
-
-            // 5. إنشاء رابط الواتساب
             const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
 
-            // تأثير بصري للزر أثناء التحويل
+            // تأثير بصري للزر
             const btn = this.querySelector('button[type="submit"]');
             const originalText = btn.innerHTML;
             
@@ -118,7 +114,6 @@ const contactForm = document.getElementById('contactForm');
 
             // تأخير زمني بسيط ثم فتح الواتساب
             setTimeout(() => {
-                // فتح رابط الواتساب في نافذة جديدة
                 window.open(whatsappUrl, '_blank');
                 
                 // إعادة الزر لشكله الطبيعي وتفريغ الحقول
