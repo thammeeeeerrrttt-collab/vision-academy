@@ -1,4 +1,25 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // -- إضافة كود زر القائمة للهواتف --
+    const mobileMenu = document.getElementById('mobile-menu');
+    const navList = document.getElementById('nav-list');
+
+    // إظهار/إخفاء القائمة عند الضغط على الزر ☰
+    if (mobileMenu) {
+        mobileMenu.addEventListener('click', () => {
+            navList.classList.toggle('active');
+        });
+    }
+
+    // إخفاء القائمة تلقائياً بعد اختيار أي رابط (لشاشات الجوال)
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+                navList.classList.remove('active');
+            }
+        });
+    });
+    // ------------------------------------
     
     // 1. نظام التبديل السلس بين الأقسام (Single Page Application)
     const navLinks = document.querySelectorAll('.nav-link');
