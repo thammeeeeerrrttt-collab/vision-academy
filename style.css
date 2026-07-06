@@ -793,10 +793,52 @@ footer span {
 /* =========================================
    التجاوب مع الشاشات الصغيرة (Media Queries)
 ========================================= */
+/* إخفاء زر الجوال في شاشات الكمبيوتر */
+.menu-toggle {
+    display: none;
+    font-size: 2rem;
+    color: var(--primary-sky);
+    cursor: pointer;
+}
+
+/* =========================================
+   التجاوب مع الشاشات الصغيرة (Media Queries)
+========================================= */
 @media (max-width: 768px) {
-    nav ul {
+    /* إظهار زر الجوال ☰ */
+    .menu-toggle {
+        display: block;
+    }
+    
+    /* إخفاء زر "سجل الآن" في الأعلى لتوفير المساحة */
+    .desktop-only {
         display: none;
     }
+
+    /* تحويل القائمة لتصبح منسدلة من الأعلى */
+    nav ul {
+        display: none; /* مخفية افتراضياً */
+        flex-direction: column;
+        position: absolute;
+        top: 70px; /* تظهر تحت الشريط مباشرة */
+        left: 0;
+        width: 100%;
+        background: rgba(11, 19, 43, 0.95);
+        backdrop-filter: blur(10px);
+        padding: 20px 0;
+        text-align: center;
+        border-bottom: 2px solid var(--primary-sky);
+    }
+
+    /* هذا الكلاس سيتم إضافته بالجافاسكريبت عند الضغط لإظهار القائمة */
+    nav ul.active {
+        display: flex;
+    }
+
+    nav ul li {
+        margin-bottom: 15px;
+    }
+
     .hero-content h1 {
         font-size: 2.3rem;
     }
